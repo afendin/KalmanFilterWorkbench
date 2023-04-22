@@ -4,6 +4,8 @@ DrawManager::DrawManager(QObject *parent)
     : QObject{parent}
 {
 
+    m_trust_velocity = 0.9;
+    m_trust_distance = 0.1;
     m_lastTime = 0;
 }
 

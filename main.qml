@@ -8,6 +8,13 @@ import KalmanFilterWorkbench
 Window {
     id: root
 
+    // thanks to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values_inclusive
+    function getRandomIntInclusive(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+    }
+
     width: 1000
     height: 1000
     visible: true
@@ -22,43 +29,39 @@ Window {
         Timer {
             id: timer
 
-            property int value: 999999999
+            property int value: 0
 
             interval: 100
             repeat: true
             running: true
-            onTriggered: value--
+            onTriggered: {
+                value++
+                const bias = root.getRandomIntInclusive(-sbBiasDistance.value,
+                                                        sbBiasDistance.value)
+                DrawManager.update(distanceSlider.value + bias, value)
+            }
+        }
+
+        Slider {
+            id: distanceSlider
+
+            anchors.centerIn: parent
+            width: parent.width
+            from: 0
+            to: 1000
         }
 
         Rectangle {
-            anchors {
-                bottom: parent.bottom
-                bottomMargin: 10
-            }
-
-            width: parent.width
-            height: 2
-            color: "black"
-
-
-            Repeater {
-                model: 4
-
-                KFDelimiter {
-                    anchors.verticalCenter: parent.bottom
-                    x: (timer.value - parent.width / (index + 2))*10 % parent.width
-                }
-            }
+            color: 'red'
+            width: 30
+            height: width
+            opacity: 0.5
+            x: (700 - ((1000 - DrawManager.estimated_distance) * (700 / 1000))) - width / 2
         }
-
     }
 
     ColumnLayout {
         anchors.bottom: parent.bottom
-
-        Row {
-
-        }
 
         Row {
             Label {
@@ -66,22 +69,24 @@ Window {
             }
 
             SpinBox {
-//                value: DrawManager.trust_distance
-//                onValueChanged: DrawManager.trust_distance !== value ?
-//                                DrawManager.trust_distance = value : null
+                value: DrawManager.bias_velocity
+                onValueChanged: DrawManager.bias_velocity !== value ?
+                                DrawManager.bias_velocity = value : null
                 editable: true
             }
         }
 
         Row {
             Label {
-                text: qsTr("Distance bias")
+                text: qsTr("Distance bias (up to in meters)")
             }
 
             SpinBox {//TODO give apropriate names
-//                value: DrawManager.trust_distance
-//                onValueChanged: DrawManager.trust_distance !== value ?
-//                                DrawManager.trust_distance = value : null
+                id: sbBiasDistance
+
+                value: DrawManager.bias_distance
+                onValueChanged: DrawManager.bias_distance !== value ?
+                                DrawManager.bias_distance = value : null
                 editable: true
             }
         }
@@ -92,9 +97,15 @@ Window {
             }
 
             SpinBox {
-                value: DrawManager.trust_velocity
-                onValueChanged: DrawManager.trust_velocity !== value ?
-                                DrawManager.trust_velocity = value : null
+                id: sbTrustVelocity
+
+                property real realValue: value / 10
+
+                value: DrawManager.trust_velocity * 10
+                onRealValueChanged: DrawManager.trust_velocity !== realValue ?
+                                DrawManager.trust_velocity = realValue : null
+                from: 1 //TODO: convert SB to decimals
+                to : 10
                 editable: true
             }
         }
@@ -105,9 +116,15 @@ Window {
             }
 
             SpinBox {
-                value: DrawManager.trust_distance
-                onValueChanged: DrawManager.trust_distance !== value ?
-                                DrawManager.trust_distance = value : null
+                id: sbTrustDistance
+
+                property real realValue: value / 10
+
+                value: DrawManager.trust_distance * 10
+                onRealValueChanged: {DrawManager.trust_distance !== realValue ?
+                                DrawManager.trust_distance = realValue : null; console.log(realValue)}
+                from: 1 //TODO: convert SB to decimals
+                to : 10
                 editable: true
             }
         }

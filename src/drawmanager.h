@@ -15,9 +15,10 @@ class DrawManager : public QObject
     QML_WRITABLE_PROPERTY(float, predicted_distance)
     QML_WRITABLE_PROPERTY(float, estimated_velocity)
     QML_WRITABLE_PROPERTY(float, predicted_velocity)
-
     QML_WRITABLE_PROPERTY(float, trust_distance);
     QML_WRITABLE_PROPERTY(float, trust_velocity);
+    QML_WRITABLE_PROPERTY(float, bias_distance);
+    QML_WRITABLE_PROPERTY(float, bias_velocity);
 public:
     explicit DrawManager(QObject *parent = nullptr);
 
