@@ -21,6 +21,9 @@ qt_add_qml_module(appKalmanFilterWorkbench
     VERSION 1.0
     QML_FILES main.qml
               KFDelimiter.qml
+              d3.min.js
+              KFHeightGraph.qml
+              KFDeviationGraph.qml
 )
 
 target_include_directories(appKalmanFilterWorkbench PRIVATE

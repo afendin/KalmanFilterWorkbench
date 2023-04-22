@@ -60,21 +60,49 @@ Window {
         }
     }
 
+    Rectangle {
+        anchors.centerIn: parent
+        width: 365
+        height: width
+        color: parent.color
+        border.width: 1
+        border.color: Material.foreground
+        KFDeviationGraph {
+            id: deviationGraph
+
+            anchors.fill: parent
+            initMinX: 0
+            initMaxX: 100
+            initMaxY: 0.5
+            initMinY: -initMaxY
+            bottomMargin: 0
+            leftMargin: 0
+        }
+    }
+
+    Rectangle {
+        anchors.right: parent.right
+        width: 365
+        height: width
+        color: parent.color
+        border.width: 1
+        border.color: Material.foreground
+        KFHeightGraph {
+            id: heightGraph
+
+            anchors.fill: parent
+            initMinX: 0
+            initMaxX: 100
+            initMinY: 0
+            initMaxY: 5
+            bottomMargin: 0
+            leftMargin: 0
+        }
+    }
+
     ColumnLayout {
         anchors.bottom: parent.bottom
 
-        Row {
-            Label {
-                text: qsTr("Velocity bias")
-            }
-
-            SpinBox {
-                value: DrawManager.bias_velocity
-                onValueChanged: DrawManager.bias_velocity !== value ?
-                                DrawManager.bias_velocity = value : null
-                editable: true
-            }
-        }
 
         Row {
             Label {
@@ -87,25 +115,6 @@ Window {
                 value: DrawManager.bias_distance
                 onValueChanged: DrawManager.bias_distance !== value ?
                                 DrawManager.bias_distance = value : null
-                editable: true
-            }
-        }
-
-        Row {
-            Label {
-                text: qsTr("Velocity trust")
-            }
-
-            SpinBox {
-                id: sbTrustVelocity
-
-                property real realValue: value / 10
-
-                value: DrawManager.trust_velocity * 10
-                onRealValueChanged: DrawManager.trust_velocity !== realValue ?
-                                DrawManager.trust_velocity = realValue : null
-                from: 1 //TODO: convert SB to decimals
-                to : 10
                 editable: true
             }
         }
