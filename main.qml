@@ -20,6 +20,46 @@ Window {
     visible: true
     color: "gray"
 
+//    Rectangle {
+//        id: scene
+
+//        width: 700
+//        height: 300
+
+//        Timer {
+//            id: timer
+
+//            property int value: 0
+
+//            interval: 100
+//            repeat: true
+//            running: true
+//            onTriggered: {
+//                value++
+//                const bias = root.getRandomIntInclusive(-sbBiasDistance.value,
+//                                                        sbBiasDistance.value)
+//                DrawManager.update(distanceSlider.value + bias, value)
+//            }
+//        }
+
+//        Slider {
+//            id: distanceSlider
+
+//            anchors.centerIn: parent
+//            width: parent.width
+//            from: 0
+//            to: 1000
+//        }
+
+//        Rectangle {
+//            color: 'red'
+//            width: 30
+//            height: width
+//            opacity: 0.5
+//            x: (700 - ((1000 - DrawManager.estimated_distance) * (700 / 1000))) - width / 2
+//        }
+//    }
+
     Rectangle {
         id: scene
 
@@ -30,6 +70,7 @@ Window {
             id: timer
 
             property int value: 0
+            property int realDistance: value * 10
 
             interval: 100
             repeat: true
@@ -38,46 +79,59 @@ Window {
                 value++
                 const bias = root.getRandomIntInclusive(-sbBiasDistance.value,
                                                         sbBiasDistance.value)
-                DrawManager.update(distanceSlider.value + bias, value)
+                DrawManager.update(realDistance + bias, value)
+                heightGraph.addPoints([value, DrawManager.measured_distance])
             }
         }
 
-        Slider {
-            id: distanceSlider
-
-            anchors.centerIn: parent
-            width: parent.width
-            from: 0
-            to: 1000
-        }
-
         Rectangle {
-            color: 'red'
+            anchors.centerIn: parent
+
             width: 30
             height: width
-            opacity: 0.5
-            x: (700 - ((1000 - DrawManager.estimated_distance) * (700 / 1000))) - width / 2
-        }
-    }
+            color: 'green'
 
-    Rectangle {
-        anchors.centerIn: parent
-        width: 365
-        height: width
-        color: parent.color
-        border.width: 1
-        border.color: Material.foreground
-        KFDeviationGraph {
-            id: deviationGraph
+            Rectangle {
+                x: (DrawManager.estimated_distance - timer.realDistance) * (width / scene.width)
+                y: - height - 10
+                width: 30
+                height: width
+                color: 'green'
+                opacity: 0.5
 
-            anchors.fill: parent
-            initMinX: 0
-            initMaxX: 100
-            initMaxY: 0.5
-            initMinY: -initMaxY
-            bottomMargin: 0
-            leftMargin: 0
+                Behavior on x {
+
+                    NumberAnimation {
+                        //This specifies how long the animation takes
+                        duration: timer.interval
+                    }
+                }
+            }
         }
+
+
+
+        Rectangle {
+            anchors {
+                bottom: parent.bottom
+                bottomMargin: 10
+            }
+
+            width: parent.width
+            height: 2
+            color: "black"
+
+
+            Repeater {
+                model: 4
+
+                KFDelimiter {
+                    anchors.verticalCenter: parent.bottom
+                    x: (parent.width) - (timer.realDistance % parent.width + index * parent.width / 4)
+                }
+            }
+        }
+
     }
 
     Rectangle {
@@ -87,14 +141,15 @@ Window {
         color: parent.color
         border.width: 1
         border.color: Material.foreground
+
         KFHeightGraph {
             id: heightGraph
 
             anchors.fill: parent
             initMinX: 0
-            initMaxX: 100
+            initMaxX: 10
             initMinY: 0
-            initMaxY: 5
+            initMaxY: 10
             bottomMargin: 0
             leftMargin: 0
         }
@@ -132,6 +187,25 @@ Window {
                 value: DrawManager.trust_distance * 10
                 onRealValueChanged: {DrawManager.trust_distance !== realValue ?
                                 DrawManager.trust_distance = realValue : null; console.log(realValue)}
+                from: 1 //TODO: convert SB to decimals
+                to : 10
+                editable: true
+            }
+        }
+
+        Row {
+            Label {
+                text: qsTr("Velocity trust")
+            }
+
+            SpinBox {
+                id: sbTrustVelocity
+
+                property real realValue: value / 10
+
+                value: DrawManager.trust_velocity * 10
+                onRealValueChanged: {DrawManager.trust_velocity !== realValue ?
+                                DrawManager.trust_velocity = realValue : null; console.log(realValue)}
                 from: 1 //TODO: convert SB to decimals
                 to : 10
                 editable: true

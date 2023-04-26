@@ -18,7 +18,7 @@ Canvas {
     property var lineArray: []
 
     function addPoints(inPointsArray) {
-        lineArray = inPointsArray;
+        lineArray.push(inPointsArray);
 
         for (var i = 0; i < lineArray.length; i++) {
             if (lineArray[i][0] >= maxX)
@@ -64,8 +64,8 @@ Canvas {
 
         context.beginPath();
         context.lineWidth = 1.5;
-        context.strokeStyle = vsStyle.red;
-        context.fillStyle = vsStyle.red;
+        context.strokeStyle = "red";
+        context.fillStyle = "red";
 
         line(lineArray);
         context.stroke();
