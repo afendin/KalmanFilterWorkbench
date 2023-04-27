@@ -5,6 +5,7 @@ import "d3.min.js" as D3
 Canvas {
     id: canvas
 
+    property color lineColor: "red"
     property real initMinX: -width / 2
     property real initMaxX: width / 2
     property real initMinY: -height / 2
@@ -17,7 +18,8 @@ Canvas {
     property int bottomMargin: 10
     property var lineArray: []
 
-    function addPoints(inPointsArray) {
+    function addPoints(inPointsArray, color) {
+        canvas.lineColor = color
         lineArray.push(inPointsArray);
 
         for (var i = 0; i < lineArray.length; i++) {
@@ -64,8 +66,8 @@ Canvas {
 
         context.beginPath();
         context.lineWidth = 1.5;
-        context.strokeStyle = "red";
-        context.fillStyle = "red";
+        context.strokeStyle = canvas.lineColor
+        context.fillStyle = canvas.lineColor
 
         line(lineArray);
         context.stroke();

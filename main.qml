@@ -80,7 +80,8 @@ Window {
                 const bias = root.getRandomIntInclusive(-sbBiasDistance.value,
                                                         sbBiasDistance.value)
                 DrawManager.update(realDistance + bias, value)
-                heightGraph.addPoints([value, DrawManager.measured_distance])
+                heightGraph.addPoints([value, DrawManager.estimated_distance], "red")
+                heightGraph.addPoints([value, DrawManager.measured_distance], "blue")
             }
         }
 
