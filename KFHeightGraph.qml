@@ -20,15 +20,25 @@ Canvas {
 
     function addPoints(inPointsArray, color) {
         canvas.lineColor = color
-        lineArray.push(inPointsArray);
+        let found = false;
 
-        for (var i = 0; i < lineArray.length; i++) {
-            if (lineArray[i][0] >= maxX)
-                maxX = lineArray[i][0] * 1.5
-
-            if (lineArray[i][1] >= maxY)
-                maxY = lineArray[i][1] * 1.5
+        for (let i = 0; i < lineArray.length; i++) {
+            if (lineArray[i].color === color) {
+                lineArray[i].line.push(inPointsArray)
+                found = true
+            }
         }
+
+        if (!found)
+            lineArray.push({color: color, line: inPointsArray});
+
+
+
+        if (inPointsArray[0] >= maxX)
+            maxX = inPointsArray[0] * 1.5
+
+        if (inPointsArray[1] >= maxY)
+            maxY = inPointsArray[1] * 1.5
         requestPaint()
     }
 
@@ -64,13 +74,16 @@ Canvas {
         drawYAxis(context, 10);
         context.stroke();
 
-        context.beginPath();
-        context.lineWidth = 1.5;
-        context.strokeStyle = canvas.lineColor
-        context.fillStyle = canvas.lineColor
+        for (let i = 0; i < lineArray.length; i++) {
+            context.beginPath();
+            context.lineWidth = 1.5;
+            context.strokeStyle = lineArray[i].color
+            context.fillStyle = lineArray[i].color
+            line(lineArray[i].line);
+            context.stroke();
+        }
 
-        line(lineArray);
-        context.stroke();
+
     }
 
     function lineFunction(xScale, yScale, context) {

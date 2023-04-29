@@ -1,13 +1,13 @@
-#ifndef DRAWMANAGER_H
-#define DRAWMANAGER_H
+#ifndef STATEMANAGER_H
+#define STATEMANAGER_H
 
 #include <QObject>
 
 #include "QQmlHelpers"
 
-#define DRAW_QMLNAME "DrawManager"
+#define DRAW_QMLNAME "StateManager"
 
-class DrawManager : public QObject
+class StateManager : public QObject
 {
     Q_OBJECT
     QML_WRITABLE_PROPERTY(float, estimated_distance)
@@ -18,9 +18,8 @@ class DrawManager : public QObject
     QML_WRITABLE_PROPERTY(float, trust_distance);
     QML_WRITABLE_PROPERTY(float, trust_velocity);
     QML_WRITABLE_PROPERTY(float, bias_distance);
-    QML_WRITABLE_PROPERTY(float, bias_velocity);
 public:
-    explicit DrawManager(QObject *parent = nullptr);
+    explicit StateManager(QObject *parent = nullptr);
 
 public slots:
     void update(float measured_distance, int time);
@@ -29,4 +28,4 @@ private:
     int m_lastTime;
 };
 
-#endif // DRAWMANAGER_H
+#endif // STATEMANAGER_H

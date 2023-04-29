@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 
-#include "drawmanager.h"
+#include "statemanager.h"
 
 #define APP_URI "KalmanFilterWorkbench"
 #define UNCREATABLE_MESSAGE(NAME) QStringLiteral(NAME" is uncreatable")
@@ -24,7 +24,7 @@ private:
     void initializeComponents();
 
     QQmlApplicationEngine *m_qmlEngine = nullptr;
-    DrawManager *m_drawManager;
+    StateManager *m_drawManager;
 };
 
 #endif // APPMANAGER_H

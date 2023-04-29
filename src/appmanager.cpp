@@ -29,6 +29,6 @@ void AppManager::loadQml(const QString &urlString)
 
 void AppManager::initializeComponents()
 {
-    m_drawManager = new DrawManager(this);
+    m_drawManager = new StateManager(this);
     qmlRegisterSingletonInstance(APP_URI, 1, 0, DRAW_QMLNAME, m_drawManager);
 }

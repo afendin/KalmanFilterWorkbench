@@ -38,7 +38,7 @@ Window {
 //                value++
 //                const bias = root.getRandomIntInclusive(-sbBiasDistance.value,
 //                                                        sbBiasDistance.value)
-//                DrawManager.update(distanceSlider.value + bias, value)
+//                StateManager.update(distanceSlider.value + bias, value)
 //            }
 //        }
 
@@ -56,7 +56,7 @@ Window {
 //            width: 30
 //            height: width
 //            opacity: 0.5
-//            x: (700 - ((1000 - DrawManager.estimated_distance) * (700 / 1000))) - width / 2
+//            x: (700 - ((1000 - StateManager.estimated_distance) * (700 / 1000))) - width / 2
 //        }
 //    }
 
@@ -79,9 +79,11 @@ Window {
                 value++
                 const bias = root.getRandomIntInclusive(-sbBiasDistance.value,
                                                         sbBiasDistance.value)
-                DrawManager.update(realDistance + bias, value)
-                heightGraph.addPoints([value, DrawManager.estimated_distance], "red")
-                heightGraph.addPoints([value, DrawManager.measured_distance], "blue")
+                StateManager.update(realDistance + bias, value)
+                heightGraph.addPoints([value, StateManager.estimated_distance], "red")
+                heightGraph.addPoints([value, StateManager.measured_distance], "blue")
+                heightGraph.addPoints([value, realDistance], "green")
+                heightGraph.addPoints([value, StateManager.predicted_distance], "gray")
             }
         }
 
@@ -93,7 +95,7 @@ Window {
             color: 'green'
 
             Rectangle {
-                x: (DrawManager.estimated_distance - timer.realDistance) * (width / scene.width)
+                x: (StateManager.estimated_distance - timer.realDistance) * (width / scene.width)
                 y: - height - 10
                 width: 30
                 height: width
@@ -168,9 +170,9 @@ Window {
             SpinBox {//TODO give apropriate names
                 id: sbBiasDistance
 
-                value: DrawManager.bias_distance
-                onValueChanged: DrawManager.bias_distance !== value ?
-                                DrawManager.bias_distance = value : null
+                value: StateManager.bias_distance
+                onValueChanged: StateManager.bias_distance !== value ?
+                                StateManager.bias_distance = value : null
                 editable: true
             }
         }
@@ -185,9 +187,9 @@ Window {
 
                 property real realValue: value / 10
 
-                value: DrawManager.trust_distance * 10
-                onRealValueChanged: {DrawManager.trust_distance !== realValue ?
-                                DrawManager.trust_distance = realValue : null; console.log(realValue)}
+                value: StateManager.trust_distance * 10
+                onRealValueChanged: {StateManager.trust_distance !== realValue ?
+                                StateManager.trust_distance = realValue : null; console.log(realValue)}
                 from: 1 //TODO: convert SB to decimals
                 to : 10
                 editable: true
@@ -204,9 +206,9 @@ Window {
 
                 property real realValue: value / 10
 
-                value: DrawManager.trust_velocity * 10
-                onRealValueChanged: {DrawManager.trust_velocity !== realValue ?
-                                DrawManager.trust_velocity = realValue : null; console.log(realValue)}
+                value: StateManager.trust_velocity * 10
+                onRealValueChanged: {StateManager.trust_velocity !== realValue ?
+                                StateManager.trust_velocity = realValue : null; console.log(realValue)}
                 from: 1 //TODO: convert SB to decimals
                 to : 10
                 editable: true

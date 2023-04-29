@@ -10,7 +10,7 @@ find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
 qt_add_executable(appKalmanFilterWorkbench
     main.cpp
     src/appmanager.h src/appmanager.cpp
-    src/drawmanager.h src/drawmanager.cpp
+    src/statemanager.h src/statemanager.cpp
     3rdparty/lib-qt-qml-tricks/src/qqmlobjectlistmodel.h
     3rdparty/lib-qt-qml-tricks/src/qqmlobjectlistmodel.cpp
 
@@ -23,7 +23,6 @@ qt_add_qml_module(appKalmanFilterWorkbench
               KFDelimiter.qml
               d3.min.js
               KFHeightGraph.qml
-              KFDeviationGraph.qml
 )
 
 target_include_directories(appKalmanFilterWorkbench PRIVATE
