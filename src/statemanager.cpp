@@ -4,12 +4,7 @@
 StateManager::StateManager(QObject *parent)
     : QObject{parent}
 {
-    m_lastTime = 0;
-    m_estimated_distance = 0;
-    m_measured_distance = 0;
-    m_predicted_distance = 0;
-    m_estimated_velocity = 0;
-    m_predicted_velocity = 0;
+    restart();
     m_trust_distance = 0.1;
     m_trust_velocity = 0.9;
     m_bias_distance = 99;
@@ -47,4 +42,14 @@ void StateManager::update(float measured_distance, int time)
     // store last measurements
     set_measured_distance(measured_distance);
     m_lastTime = time;
+}
+
+void StateManager::restart()
+{
+    m_lastTime = 0;
+    m_estimated_distance = 0;
+    m_measured_distance = 0;
+    m_predicted_distance = 0;
+    m_estimated_velocity = 0;
+    m_predicted_velocity = 0;
 }

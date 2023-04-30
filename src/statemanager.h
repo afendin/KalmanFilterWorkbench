@@ -23,6 +23,7 @@ public:
 
 public slots:
     void update(float measured_distance, int time);
+    void restart();
 
 private:
     int m_lastTime;

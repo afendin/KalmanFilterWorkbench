@@ -23,6 +23,16 @@ qt_add_qml_module(appKalmanFilterWorkbench
               KFDelimiter.qml
               d3.min.js
               KFHeightGraph.qml
+              KFGraphNote.qml
+              DoubleSpinBox.qml
+
+)
+
+qt_add_resources(appKalmanFilterWorkbench "resources"
+    PREFIX
+        "/"
+    FILES
+        "assets/plane.svg"
 )
 
 target_include_directories(appKalmanFilterWorkbench PRIVATE
